@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scout Hub</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <link rel="stylesheet" href="/static/scout.css">
+</head>
+<body>
+<div class="app scout-app">
+  <aside class="sidebar">
+    <div class="sidebar-head">
+      <div class="brand">
+        <div class="brand-mark">SC</div>
+        <div class="brand-text">
+          <h1>Scout Hub</h1>
+          <p>Discover · track · explore</p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="scout-nav" aria-label="Scout tools">
+      <button type="button" class="nav-tab active" data-tab="github">GitHub</button>
+      <button type="button" class="nav-tab" data-tab="news">AI News</button>
+      <button type="button" class="nav-tab" data-tab="models">Free models</button>
+    </nav>
+
+    <div class="sidebar-section"><span>Backends</span><button class="btn btn-ghost" type="button" id="refreshStatus">Refresh</button></div>
+    <div id="statusList" class="status-list"><div class="empty">Checking…</div></div>
+
+    <div class="sidebar-foot">
+      <span class="live-dot" aria-hidden="true"></span>
+      <span>Scout hub</span>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="main-header">
+      <div>
+        <h2 id="panelTitle">GitHub repos</h2>
+        <div class="sub" id="panelSub">Most starred and forked repositories</div>
+      </div>
+      <div class="header-actions">
+        <span class="count-chip" id="resultCount">—</span>
+      </div>
+    </header>
+
+    <section class="panel active" id="panel-github" data-panel="github">
+      <div class="controls">
+        <div class="field">
+          <label for="ghQuery">Query</label>
+          <input type="text" id="ghQuery" placeholder="e.g. llm agent" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="ghLanguage">Language</label>
+          <input type="text" id="ghLanguage" placeholder="e.g. Python" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="ghMinStars">Min stars</label>
+          <input type="number" id="ghMinStars" min="0" value="0" placeholder="0">
+        </div>
+        <div class="field">
+          <label for="ghSort">Sort</label>
+          <select id="ghSort">
+            <option value="stars">Stars</option>
+            <option value="forks">Forks</option>
+          </select>
+        </div>
+        <div class="field field-action">
+          <label>&nbsp;</label>
+          <button class="btn btn-primary" type="button" id="ghSearchBtn">Search</button>
+        </div>
+      </div>
+      <div class="panel-body" id="githubResults">
+        <div class="empty"><div class="empty-title">Search GitHub</div>Filter by language, stars, or keywords.</div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-news" data-panel="news">
+      <div class="controls">
+        <div class="field grow">
+          <label for="newsQuery">Query</label>
+          <input type="text" id="newsQuery" value="AI" placeholder="AI" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="newsLimit">Limit</label>
+          <input type="number" id="newsLimit" min="1" max="50" value="20">
+        </div>
+        <div class="field field-action">
+          <label>&nbsp;</label>
+          <button class="btn btn-primary" type="button" id="newsSearchBtn">Fetch news</button>
+        </div>
+      </div>
+      <div class="panel-body" id="newsResults">
+        <div class="empty"><div class="empty-title">AI headlines</div>Pull recent stories from HN and RSS feeds.</div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-models" data-panel="models">
+      <div class="controls">
+        <div class="field">
+          <label for="modelsLimit">Limit</label>
+          <input type="number" id="modelsLimit" min="1" max="50" value="30">
+        </div>
+        <div class="field field-action">
+          <label>&nbsp;</label>
+          <button class="btn btn-primary" type="button" id="modelsSearchBtn">Load models</button>
+        </div>
+      </div>
+      <div class="panel-body" id="modelsResults">
+        <div class="empty"><div class="empty-title">Free AI tools</div>Curated free-tier APIs plus popular open models on Hugging Face.</div>
+      </div>
+    </section>
+  </main>
+</div>
+<script src="/static/scout.js"></script>
+</body>
+</html>
