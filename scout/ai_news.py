@@ -43,7 +43,7 @@ def _parse_date(value: str | None) -> str:
     try:
         dt = email.utils.parsedate_to_datetime(value)
         if dt.tzinfo is None:
-            dt = dt.replace(tzinfo.timezone.utc)
+            dt = dt.replace(tzinfo=timezone.utc)
         return dt.astimezone(timezone.utc).isoformat()
     except Exception:
         return value
