@@ -98,15 +98,24 @@ body{
 .spinner{width:14px;height:14px;border:2px solid var(--border-strong);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* Narrow / phone: stack, compact top chrome, main scrolls */
+/* Mobile: normal document/body scroll — no locked 100dvh nested viewport */
 @media (max-width:860px){
-  body{overflow:hidden}
+  html{
+    height:auto;
+  }
+  body{
+    overflow:auto;
+    overflow-x:hidden;
+    height:auto;
+    min-height:100%;
+    min-height:100dvh;
+  }
   .app{
     flex-direction:column;
-    height:100dvh;
-    height:100svh;
-    max-height:100dvh;
-    max-height:100svh;
+    height:auto;
+    min-height:0;
+    max-height:none;
+    overflow:visible;
   }
   .sidebar{
     width:100%;
@@ -126,7 +135,8 @@ body{
   .main{
     flex:1 1 auto;
     min-height:0;
-    overflow:hidden;
+    height:auto;
+    overflow:visible;
   }
   .main-header{
     padding:12px 14px 10px;

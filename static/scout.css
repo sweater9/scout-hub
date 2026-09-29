@@ -89,6 +89,7 @@
 .error-banner{padding:10px 12px;border-radius:var(--radius-sm);background:var(--danger-soft);border:1px solid rgba(240,113,120,0.22);color:#f5a0a6;font-size:0.82rem;margin-bottom:12px}
 .loading{color:var(--text-dim);font-size:0.85rem;padding:24px 8px;display:flex;align-items:center;gap:10px}
 
+/* Mobile: page scrolls; panel content in normal flow (no nested overflow trap) */
 @media (max-width:860px){
   .scout-nav{
     flex-direction:row;
@@ -108,6 +109,15 @@
     padding:10px 12px;
     font-size:0.8rem;
   }
+  .panel{
+    flex:none;
+    min-height:0;
+    height:auto;
+    overflow:visible;
+  }
+  .panel.active{
+    display:block;
+  }
   .controls{
     padding:12px 14px;
     position:sticky;
@@ -118,9 +128,12 @@
   .controls .field-action{width:100%}
   .controls .field-action .btn{width:100%;min-height:var(--tap-min,44px)}
   .panel-body{
+    flex:none;
+    height:auto;
+    min-height:0;
+    overflow:visible;
+    overscroll-behavior:auto;
     padding:12px 14px calc(20px + env(safe-area-inset-bottom,0px));
-    overflow-y:auto;
-    -webkit-overflow-scrolling:touch;
   }
   .card-grid{grid-template-columns:1fr;gap:8px}
   .card{padding:12px}
