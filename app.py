@@ -20,6 +20,10 @@ CORS(app)
 
 
 @app.route("/")
+def landing():
+    return render_template("landing.html")
+
+
 @app.route("/scout")
 def scout_page():
     return render_template("scout.html")

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Scout Hub — GitHub, AI news, and free models</title>
+  <meta name="description" content="Scout Hub searches GitHub repositories, pulls AI news from Hacker News and RSS, and lists free-tier APIs plus popular Hugging Face models.">
+  <link rel="stylesheet" href="/static/app.css">
+  <style>
+    html, body.landing-body { height: auto; min-height: 100%; overflow: auto; }
+    .lp { color: var(--text); }
+    .lp a { color: inherit; }
+    .nav-links .btn-primary, .cta .btn-primary, .close .btn-primary { color: #0b0c0f; }
+    .nav {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      max-width: 1080px; margin: 0 auto; padding: 18px 24px;
+    }
+    .nav-links { display: flex; align-items: center; gap: 18px; font-size: 0.88rem; color: var(--text-muted); }
+    .nav-links a { text-decoration: none; }
+    .nav-links a:hover { color: var(--text); }
+    .brand { text-decoration: none; }
+    .hero { max-width: 1080px; margin: 0 auto; padding: 56px 24px 28px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--accent-strong); font-weight: 650; margin: 0 0 16px;
+    }
+    .hero h1 {
+      margin: 0; max-width: 16ch; font-size: clamp(2.2rem, 5vw, 3.4rem);
+      line-height: 1.05; letter-spacing: -0.035em; font-weight: 680;
+    }
+    .lede { max-width: 58ch; margin: 18px 0 0; color: var(--text-muted); font-size: 1.05rem; line-height: 1.55; }
+    .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+    .cta .btn { text-decoration: none; display: inline-flex; align-items: center; }
+    .btn-quiet { background: transparent; }
+    .panel-shot {
+      max-width: 1080px; margin: 8px auto 0; padding: 0 24px 48px;
+    }
+    .shot {
+      border: 1px solid var(--border); border-radius: 16px; background: var(--bg-panel);
+      overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,.35);
+    }
+    .shot-bar { display: flex; gap: 6px; padding: 12px 14px; border-bottom: 1px solid var(--border); }
+    .shot-bar i { width: 8px; height: 8px; border-radius: 50%; background: var(--border-strong); display: block; }
+    .shot-grid { display: grid; grid-template-columns: 200px 1fr; min-height: 220px; }
+    .shot-side { border-right: 1px solid var(--border); padding: 14px; }
+    .chip {
+      display: block; margin: 0 0 8px; padding: 8px 10px; border-radius: 8px;
+      background: var(--bg-soft); color: var(--text-muted); font-size: 0.8rem;
+    }
+    .chip.on { background: var(--accent-soft); color: var(--text); }
+    .shot-main { padding: 16px 18px; }
+    .row {
+      display: flex; justify-content: space-between; gap: 12px; align-items: center;
+      padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem;
+    }
+    .row strong { font-weight: 620; }
+    .row span { color: var(--text-dim); font-size: 0.78rem; white-space: nowrap; }
+    section.block { max-width: 1080px; margin: 0 auto; padding: 12px 24px 56px; }
+    .block h2 { margin: 0 0 8px; font-size: 1.45rem; letter-spacing: -0.03em; }
+    .block > p { margin: 0 0 22px; color: var(--text-muted); max-width: 62ch; line-height: 1.5; }
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .card {
+      background: var(--bg-panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px 18px 16px;
+    }
+    .card h3 { margin: 10px 0 6px; font-size: 1rem; letter-spacing: -0.02em; }
+    .card p { margin: 0; color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
+    .kicker { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-dim); font-weight: 650; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .step { padding: 4px 4px 0; }
+    .num { font-size: 0.78rem; color: var(--accent-strong); font-weight: 700; }
+    .step h3 { margin: 6px 0; font-size: 1rem; }
+    .step p { margin: 0; color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
+    .close {
+      max-width: 1080px; margin: 0 auto 40px; padding: 0 24px;
+    }
+    .close-inner {
+      border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px;
+      background: linear-gradient(180deg, var(--bg-elevated), var(--bg-panel));
+      display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;
+    }
+    .close h2 { margin: 0 0 6px; letter-spacing: -0.03em; font-size: 1.4rem; }
+    .close p { margin: 0; color: var(--text-muted); }
+    footer.ft {
+      max-width: 1080px; margin: 0 auto; padding: 8px 24px 36px;
+      display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+      color: var(--text-dim); font-size: 0.8rem;
+    }
+    footer.ft a { color: var(--text-muted); }
+    @media (max-width: 800px) {
+      .shot-grid, .cards, .steps { grid-template-columns: 1fr; }
+      .shot-side { border-right: none; border-bottom: 1px solid var(--border); display: flex; gap: 8px; }
+      .chip { margin: 0; }
+      .nav-links .hide-sm { display: none; }
+      .hero { padding-top: 28px; }
+    }
+  </style>
+</head>
+<body class="landing-body">
+  <div class="lp">
+    <header class="nav">
+      <a class="brand" href="/">
+        <div class="brand-mark">SC</div>
+        <div class="brand-text">
+          <h1>Scout Hub</h1>
+          <p>Discover · track · explore</p>
+        </div>
+      </a>
+      <nav class="nav-links" aria-label="Page">
+        <a class="hide-sm" href="#tools">Tools</a>
+        <a class="hide-sm" href="#how">How it works</a>
+        <a class="btn btn-primary" href="/scout">Open Scout</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <p class="eyebrow">One desk for scouting</p>
+      <h1>Repos, AI news, and free models in one place.</h1>
+      <p class="lede">Scout Hub searches GitHub by stars, forks, and language, pulls headlines from Hacker News and RSS, and lists free-tier APIs next to popular Hugging Face models.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="/scout">Open the app</a>
+        <a class="btn btn-quiet" href="#tools">See the three tools</a>
+      </div>
+    </section>
+
+    <div class="panel-shot" aria-hidden="true">
+      <div class="shot">
+        <div class="shot-bar"><i></i><i></i><i></i></div>
+        <div class="shot-grid">
+          <div class="shot-side">
+            <span class="chip on">GitHub</span>
+            <span class="chip">AI News</span>
+            <span class="chip">Free models</span>
+          </div>
+          <div class="shot-main">
+            <div class="row"><strong>llm agent</strong><span>stars · Python</span></div>
+            <div class="row"><strong>AI headlines</strong><span>HN + RSS</span></div>
+            <div class="row"><strong>Free-tier APIs</strong><span>plus Hugging Face</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="block" id="tools">
+      <h2>Three tools, no extra tabs.</h2>
+      <p>Each panel is a live search against public sources. Results open on the original site.</p>
+      <div class="cards">
+        <article class="card">
+          <div class="kicker">GitHub</div>
+          <h3>Find the repos worth a look</h3>
+          <p>Search by keyword, language, and minimum stars. Sort by stars or forks using the GitHub Search API.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">AI news</div>
+          <h3>Catch the day’s headlines</h3>
+          <p>Pull recent stories from Hacker News Algolia and RSS feeds, then open the source.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">Free models</div>
+          <h3>See what you can use for free</h3>
+          <p>A short list of free-tier APIs, plus popular open models on Hugging Face.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="block" id="how">
+      <h2>How a scan works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="num">01</div>
+          <h3>Pick a panel</h3>
+          <p>GitHub, news, or models. Each one keeps its own query.</p>
+        </div>
+        <div class="step">
+          <div class="num">02</div>
+          <h3>Filter and fetch</h3>
+          <p>Set a language, a star floor, or a news query, then load results.</p>
+        </div>
+        <div class="step">
+          <div class="num">03</div>
+          <h3>Open the source</h3>
+          <p>Jump out to the repo, the article, or the model page.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="close">
+      <div class="close-inner">
+        <div>
+          <h2>Start a scan</h2>
+          <p>The app is live. The first load on the free host can take about half a minute.</p>
+        </div>
+        <a class="btn btn-primary" href="/scout">Open Scout Hub</a>
+      </div>
+    </div>
+
+    <footer class="ft">
+      <span>Scout Hub</span>
+      <a href="https://github.com/sweater9/scout-hub">GitHub</a>
+    </footer>
+  </div>
+</body>
+</html>
